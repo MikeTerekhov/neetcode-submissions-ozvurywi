@@ -9,6 +9,7 @@ class Solution:
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         self.res = 0
 
+        # this function returns the HEIGHT of call
         def dfs(curr):
             if not curr:
                 return 0
@@ -16,10 +17,11 @@ class Solution:
             left = dfs(curr.left)
             right = dfs(curr.right)
 
+            # DIAMETER
             self.res = max(self.res, left + right)
 
+            # HEIGHT
             return 1 + max(left, right)
 
         dfs(root)
-
         return self.res
