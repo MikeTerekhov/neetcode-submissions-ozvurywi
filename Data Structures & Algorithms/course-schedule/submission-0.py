@@ -1,37 +1,25 @@
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        # preMap
-            # course -> prereq
-        # DFS on the map
-            # base case -> no prereq per course
-        # O(nodes + prereq)
-        # visit set to detect cycle
-        preMap = { i :[] for i in range(numCourses)}
+        adj = { i : [] for i  in range(numCourses)}
+        path = set()
 
-        for crs, pre in prerequisites:
-            preMap[crs].append(pre)
+        for crc, pre in prerequisites:
+            adj[crc].append(pre)
 
-        # visit set stores all courses along the curr DFS path
-        visitSet = set()
         def dfs(crs):
-            # this indicates a cycle / loop
-            if crs in visitSet:
+            if crs in path:
                 return False
-            # a course has no prereqs so its valid
-            if preMap[crs] == []:
+            if adj[crs] == []:
                 return True
-            visitSet.add(crs)
 
-            for pre in preMap[crs]:
+            path.add(crs)
+            for pre in adj[crs]:
                 if not dfs(pre): return False
 
-            # IMPORTANT
-            visitSet.remove(crs)
-            # this indicates this course can be completed since we verified it so no repeated work
-            preMap[crs] = []
+            path.remove(crs)
+            adj[crs] = []
             return True
 
         for crs in range(numCourses):
             if not dfs(crs): return False
         return True
-
