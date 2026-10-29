@@ -1,43 +1,38 @@
 class Solution:
     def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
-        # Topological sort
-        # map node -> prereqs
-        prereq = {c : [] for c in range(numCourses)}
-        for crs, pre in prerequisites:
-            prereq[crs].append(pre)
-        # DFS until a course has no pres
-            # add to output & cross out from map
-            # pop back up
+        adj = {i:[] for i in range(numCourses)}
+        for cur, pre in prerequisites:
+            adj[cur].append(pre)
 
-        # course has states:
-            # visited -> added to output
-            # visiting -> in DFS path, but not in output
-                # cycle detection
-            # unvisited -> not in output or DFS path
-        output = []
+        path = set()
         visit = set()
-        cycle = set()
+        res = []
+
+        # dfs at everynode
+        # add to output at end if no pre reqs
+
         def dfs(crs):
-            if crs in cycle:
+            if crs in path:
                 return False
+
             if crs in visit:
                 return True
-            
-            cycle.add(crs)
-            for pre in prereq[crs]:
-                if dfs(pre) == False: return False
 
-            cycle.remove(crs)
+            path.add(crs)
+            for pre in adj[crs]:
+                if dfs(pre) == False:
+                    return False
+
+            path.remove(crs)
             visit.add(crs)
-            output.append(crs)
+            res.append(crs)
             return True
 
         for c in range(numCourses):
-            if dfs(c) == False: return []
-        
-        return output
+            if dfs(c) == False:
+                return []
+
+        return res
 
 
-        # cycle ->  return []
-        # O(pres + courses) = O(v + E)
-        # visitSet to determine cycle along DFS path
+            
