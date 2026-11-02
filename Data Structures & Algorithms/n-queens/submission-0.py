@@ -1,37 +1,41 @@
 class Solution:
     def solveNQueens(self, n: int) -> List[List[str]]:
-        cols = set()
-        posDiag = set() # (r + c)
-        NegDiag = set() # (r - c)
+        # pos diags = (r + c) const
+        # neg diags = (r - c) const
+        # can't place in same row 
+
+        col = set()
+        posDiag = set() # r + c
+        negDiag = set() # r - c
 
         res = []
         board = [["."] * n for i in range(n)]
 
-        # go row by row dfs
-        def dfs(r):
-            # base case is get to the last row
+        def backtrack(r):
             if r == n:
                 copy = ["".join(row) for row in board]
                 res.append(copy)
                 return
 
             for c in range(n):
-                if c in cols or (r + c) in posDiag or (r - c) in NegDiag:
+                if c in col or (r + c) in posDiag or (r - c) in negDiag:
                     continue
 
-                cols.add(c)
+                col.add(c)
                 posDiag.add(r + c)
-                NegDiag.add(r - c)
+                negDiag.add(r - c)
                 board[r][c] = "Q"
 
-                dfs(r + 1)
-                # clean up
-                cols.remove(c)
+                backtrack(r + 1)
+
+                col.remove(c)
                 posDiag.remove(r + c)
-                NegDiag.remove(r - c)
+                negDiag.remove(r - c)
                 board[r][c] = "."
 
-        dfs(0)
+        backtrack(0)
         return res
 
-                
+
+
+
