@@ -1,40 +1,25 @@
 class Solution:
     def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
-        # dijktras shortest path alg
-        # min heap (path, node)
-            # add node
-            # pop it
-                # add neighbors to minheap
-                # keep track of WHOLE path not just prev edge
-        # E = V^2 (most number of edges)
-        # O(E*logV^2) -> O(E*logV)
-        # disconnected node -> alg fails can't visit all so return -1
-            # len visit == n ?
+        adj = collections.defaultdict(list)
 
-        # adjacency list
-        edges = collections.defaultdict(list)
         for u, v, w in times:
-            edges[u].append((v, w))
+            adj[u].append((v, w))
 
-        # path cost of 0 to get to the starting node
-        # note starting node is given to us -> k
-        minHeap = [(0, k)]
+        minH = [] #[ path, node]
+        heapq.heappush(minH, [0, k])
+
         visit = set()
-        res = 0
-        while minHeap:
-            # pop min
-            cost_main, node_main = heapq.heappop(minHeap)
-            if node_main in visit:
+        t = 0
+
+        while minH:
+            w1, n1 = heapq.heappop(minH)
+            if n1 in visit:
                 continue
-            visit.add(node_main)
-            res = max(res, cost_main)
+            visit.add(n1)
+            t = max(w1, t)
 
-            # go through neighbors BFS
-            for node_nei, cost_nei in edges[node_main]:
-                if node_nei not in visit:
-                    # NOTE : if node not visited we add to HEAP not cisit set, we do not visit neighbors just append to Q
-                    # NOTE : cost is sum along path not just that cost_nei
-                    heapq.heappush(minHeap, (cost_nei + cost_main, node_nei))
+            for n2, w2 in adj[n1]:
+                if n2 not in visit:
+                    heapq.heappush(minH, [w1 + w2, n2])
 
-        return res if len(visit) == n else -1
-                    
+        return t if len(visit) == n else -1
