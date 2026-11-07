@@ -1,24 +1,26 @@
 class Solution:
     def permuteUnique(self, nums: List[int]) -> List[List[int]]:
-        # input array to a counts hashmap
-        m = Counter(nums)
         res = []
         perm = []
+        counts = {n : 0 for n in nums}
+        for n in nums:
+            counts[n] += 1
 
-        def dfs():
+        def backtrack():
             if len(perm) == len(nums):
                 res.append(perm.copy())
                 return
 
-            for n in m:
-                if m[n] > 0:
+            for n in counts:
+                if counts[n] > 0:
                     perm.append(n)
-                    m[n] -= 1
+                    counts[n] -= 1
 
-                    dfs()
-
-                    m[n] += 1
+                    backtrack()
+                    counts[n] += 1
                     perm.pop()
 
-        dfs()
+        backtrack()
         return res
+
+        
