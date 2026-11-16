@@ -2,19 +2,16 @@ class Solution:
     def subsets(self, nums: List[int]) -> List[List[int]]:
         res = []
 
-        subset = []
-
+        sub = []
         def dfs(i):
             if i >= len(nums):
-                res.append(subset.copy())
-                return
+                res.append(sub.copy())
+                return 
 
-            # include the number path
-            subset.append(nums[i])
+            sub.append(nums[i])
             dfs(i + 1)
 
-            # DO NOT include the number path
-            subset.pop()
+            sub.pop()
             dfs(i + 1)
 
         dfs(0)
