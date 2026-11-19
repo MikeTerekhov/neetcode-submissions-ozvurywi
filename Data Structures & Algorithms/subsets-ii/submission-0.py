@@ -3,21 +3,20 @@ class Solution:
         res = []
         nums.sort()
 
-        def dfs(subset, i):
-            if i == len(nums):
-                res.append(subset.copy())
+        def dfs(i, sub):
+            if i >= len(nums):
+                res.append(sub.copy())
                 return
 
-            # take nums[i]
-            subset.append(nums[i])
-            dfs(subset, i + 1)
+            sub.append(nums[i])
+            dfs(i + 1, sub)
 
-            subset.pop()
-            # skip ALL occurences of nums[i]
+            sub.pop()
+
             while i + 1 < len(nums) and nums[i] == nums[i + 1]:
                 i += 1
-            dfs(subset, i + 1)
 
-        dfs([], 0)
+            dfs(i + 1, sub)
+
+        dfs(0, [])
         return res
-            
