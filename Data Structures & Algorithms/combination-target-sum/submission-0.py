@@ -6,15 +6,14 @@ class Solution:
             if total == target:
                 res.append(cur.copy())
                 return
-            if total > target or i >= len(nums):
+            if i >= len(nums) or total > target:
                 return
 
-            # INCLUDE value tree path
             cur.append(nums[i])
             dfs(i, cur, total + nums[i])
-            # DO NOT include value tree path
             cur.pop()
             dfs(i + 1, cur, total)
+
 
         dfs(0, [], 0)
         return res
